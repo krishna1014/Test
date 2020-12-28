@@ -1,0 +1,189 @@
+package com.example.applicationdemo;
+
+import android.app.NotificationManager;
+import android.location.Location;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.clevertap.android.sdk.CTInboxListener;
+import com.clevertap.android.sdk.CTInboxStyleConfig;
+import com.clevertap.android.sdk.CleverTapAPI;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+
+public abstract class MainActivity extends AppCompatActivity implements CTInboxListener {
+
+private CleverTapAPI cleverTapDefaultInstance;
+Button yourInboxButton;
+
+    TextView textview;
+    private Bundle savedInstanceState;
+    private Object HashMap;
+    private Object String;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        this.savedInstanceState = savedInstanceState;
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+
+
+
+            final CleverTapAPI clevertapDefaultInstance = CleverTapAPI.getDefaultInstance(getApplicationContext());
+        CleverTapAPI.setDebugLevel(CleverTapAPI.LogLevel.DEBUG);
+        cleverTapDefaultInstance = CleverTapAPI.getDefaultInstance(this);
+        yourInboxButton= findViewById(R.id.yourInboxButton);
+        if (cleverTapDefaultInstance != null) {
+            //Set the Notification Inbox Listener
+            cleverTapDefaultInstance.setCTNotificationInboxListener(this);
+            //Initialize the inbox and wait for callbacks on overridden methods
+            cleverTapDefaultInstance.initializeInbox();
+
+
+
+        }
+        CleverTapAPI.getDefaultInstance(this).enableDeviceNetworkInfoReporting(true);
+
+        //requires Location Permission in AndroidManifest e.g. "android.permission.ACCESS_COARSE_LOCATION"
+        final CleverTapAPI clevertap = CleverTapAPI.getDefaultInstance(getApplicationContext());
+        Location location = clevertap.getLocation();
+// do something with location, optionally set on CleverTap for use in segmentation etc
+        clevertap.setLocation(location);
+        CleverTapAPI cleverTapAPI;
+        cleverTapAPI = CleverTapAPI.getDefaultInstance(getApplicationContext());
+        // Do not call onUserLogin directly in the onCreate() lifecycle method
+
+
+
+
+           //  CleverTapAPI cleverTapAPI = CleverTapAPI.getDefaultInstance(getApplicationContext());
+            CleverTapAPI.createNotificationChannel(getApplicationContext(), "1", "abcd", "gfgh", NotificationManager.IMPORTANCE_MAX, true);
+
+
+
+        abstract class MainActivitylmpl extends ActionBarActivity {
+            Button b1,b2,b3;
+
+
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                setContentView(R.layout.activity_main);
+
+                b1= findViewById(R.id.b1);
+                final CleverTapAPI cleverTap = clevertap;
+                b1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // event with properties
+                        HashMap<String, Object> prodViewedAction = new HashMap<String, Object>();
+                        prodViewedAction.put("Product Name", "ABC");
+                        prodViewedAction.put("Product ID", "1");
+                        prodViewedAction.put("Product ImgLink", "https://d35fo82fjcw0y8.cloudfront.net/2018/07/26020307/customer-success-clevertap.jpg");
+
+
+                        cleverTap.pushEvent("Product viewed", prodViewedAction);
+
+                        HashMap<String, Object> profileUpdate = new HashMap<String, Object>();
+                        profileUpdate.put("Name", "Satya test");                  // String
+                        profileUpdate.put("Identity", "88773322112");                    // String or number
+
+                        cleverTap.pushProfile(profileUpdate);
+
+                        Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_LONG).show();
+                    }
+
+
+
+                                              }
+                    );
+                b2= findViewById(R.id.b2);
+                b1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // event without properties
+                        cleverTap.pushEvent("PV");
+                        Toast.makeText(MainActivity.this, "PV clicked", Toast.LENGTH_LONG).show();
+                    }
+                });
+                b3= findViewById(R.id.b3);
+                b3.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+
+// each of the below mentioned fields are optional
+                        HashMap<String, Object> profileUpdate = new HashMap<String, Object>();
+                       
+                        profileUpdate.put("Email", "ab+1@gmail.com"); // Email address of the user
+                        profileUpdate.put("Phone", "+14155551234");   // Phone (with the country code, starting with +)
+
+
+                        cleverTap.pushProfile(profileUpdate);
+                    }
+                });
+
+                @Override
+                public void onInAppButtonClick Map hashMap;
+                (HashMap<String, String> hashMap) {
+                    if (hashMap != null) {
+                        hashMap.containsValue("test1");
+                        if (hashMap.containsKey("blink1")) //checking for key parameter
+                    }
+        }
+
+
+
+        }
+
+
+
+
+
+    }
+
+
+
+    @Override
+    public void inboxDidInitialize() {
+        yourInboxButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<String> tabs = new ArrayList<>();
+                tabs.add("Promotions");
+                tabs.add("Offers");
+                tabs.add("Others");//We support upto 2 tabs only. Additional tabs will be ignored
+
+                CTInboxStyleConfig styleConfig = new CTInboxStyleConfig();
+                styleConfig.setTabs(tabs);//Do not use this if you don't want to use tabs
+                styleConfig.setTabBackgroundColor("#FF0000");//provide Hex code in string ONLY
+                styleConfig.setSelectedTabIndicatorColor("#0000FF");
+                styleConfig.setSelectedTabColor("#000000");
+                styleConfig.setUnselectedTabColor("#FFFFFF");
+                styleConfig.setBackButtonColor("#FF0000");
+                styleConfig.setNavBarTitleColor("#FF0000");
+                styleConfig.setNavBarTitle("MY INBOX");
+                styleConfig.setNavBarColor("#FFFFFF");
+                styleConfig.setInboxBackgroundColor("#00FF00");
+
+                cleverTapDefaultInstance.showAppInbox(styleConfig); //Opens activity tith Tabs
+                //OR
+                cleverTapDefaultInstance.showAppInbox();//Opens Activity with default style config
+            }
+        });
+    }
+    }
+
+
+
+
